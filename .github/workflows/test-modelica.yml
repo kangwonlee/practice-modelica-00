@@ -25,6 +25,7 @@ jobs:
           which omc
           omc --version
           omc exportFMU.mos
+          ls -l
 
       - name: Set up Miniconda and create test environment
         uses: conda-incubator/setup-miniconda@v3
