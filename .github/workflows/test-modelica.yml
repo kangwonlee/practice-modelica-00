@@ -48,8 +48,20 @@ jobs:
           student-files: models/package1/modelA.mo
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
+          explanation-in: German
+        id: ai-tutor-German
+        if: always()
+        timeout-minutes: 2
+
+      - name: AI Tutor
+        uses: kangwonlee/gemini-python-tutor@main
+        with:
+          report-files: test_report.json
+          student-files: models/package1/modelA.mo
+          readme-path: README.md
+          api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: Korean
-        id: ai-tutor
+        id: ai-tutor-Korean
         if: always()
         timeout-minutes: 2
 
