@@ -1,3 +1,5 @@
+# Test file for vibration system
+
 import numpy as np
 import pytest
 
@@ -5,16 +7,9 @@ import pytest
 import pyfmi
 
 
-def test__pyfmi_fmi_has_FMU():
-    assert hasattr(pyfmi.fmi, "FMU"), (
-        "pyfmi.fmi should have an FMU class\n"
-        f"dir(pyfmi.fmi): {dir(pyfmi.fmi)}"
-    )
-
-
 @pytest.fixture(scope="module")  # Load FMU only once per test session
 def model():
-    return pyfmi.fmi.FMU("VibratingSystem.fmu")  # Path to your FMU
+    return pyfmi.fmi.load_fmu("VibratingSystem.fmu")  # Path to your FMU
 
 
 def test_initial_conditions(model):
