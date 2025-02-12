@@ -1,0 +1,29 @@
+loadModel("VibratingSystem"); // Replace YourModel with the name of your model
+
+// Optional: Set some simulation flags if needed
+// setCommandLineOptions("-s"); // Example: enable simulation code generation
+// setCommandLineOptions("--fmiFlags=s:cvode,nls:homotopy"); // Example: Set specific fmi flags
+
+// Instantiate the model.  Important for FMU export!
+instantiateModel(YourModel);
+
+// Export the FMU.  Specify the FMU file name and any options.
+exportFMU("VibratingSystem.fmu",
+  fmiVersion = "2.0", // Or "1.0" for FMI 1.0
+  fmiType = "CoSimulation", // Or "ModelExchange"
+  withSources = true, // Include source code (optional, see --fmiSources)
+  // Optional: other FMU export options can be provided here
+  // see the documentation for exportFMU for a full list of options.
+  // Example:
+  // includeProtected = true,
+  // licenseText = "Your License Text",
+  // modelDescriptionFile = "models/package1/modelA.mo"
+);
+
+// Optional: Print a message to confirm.
+println("FMU exported to VibratingSystem.fmu");
+
+// Optional: Unload the model to free memory
+unloadModel(YourModel);
+
+quit(); // Exit the OpenModelica Compiler
