@@ -9,13 +9,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Miniconda and create test environment
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          auto-update-conda: true
-          activate-environment: test-environment
-          environment-file: tests/environment.yml
-
       - name: Install OpenModelica
         run: |
           sudo apt-get update
@@ -33,6 +26,13 @@ jobs:
           omc --version
           omc exportFMU.mos
 
+      - name: Set up Miniconda and create test environment
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: test-environment
+          environment-file: tests/environment.yml
+  
       - name: Run Tests and Generate Report
         run: |
           conda init
