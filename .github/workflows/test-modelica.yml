@@ -27,8 +27,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends omc # no graphical clients
 
-      - name: Export FMU
-        run: omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
+      # - name: Export FMU
+      #   run: omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
 
       - name: Run Tests and Generate Report
         run: |
