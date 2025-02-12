@@ -26,7 +26,7 @@ jobs:
 
       - name: Install Python dependencies
         run: |
-          conda install -c https://conda.binstar.org/chria pyfmi
+          conda install -c conda-forge pyfmi pytest pytest-json-report numpy
 
       - name: Export FMU
         run: omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
