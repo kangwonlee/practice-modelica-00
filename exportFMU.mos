@@ -1,4 +1,4 @@
-loadModel("VibratingSystem"); // Replace YourModel with the name of your model
+loadModel(Modelica); // Replace YourModel with the name of your model
 
 // Optional: Set some simulation flags if needed
 // setCommandLineOptions("-s"); // Example: enable simulation code generation
