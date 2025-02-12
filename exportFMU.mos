@@ -11,7 +11,7 @@ instantiateModel(YourModel);
 exportFMU("VibratingSystem.fmu",
   fmiVersion = "2.0", // Or "1.0" for FMI 1.0
   fmiType = "CoSimulation", // Or "ModelExchange"
-  withSources = true, // Include source code (optional, see --fmiSources)
+  withSources = true // Include source code (optional, see --fmiSources)
   // Optional: other FMU export options can be provided here
   // see the documentation for exportFMU for a full list of options.
   // Example:
