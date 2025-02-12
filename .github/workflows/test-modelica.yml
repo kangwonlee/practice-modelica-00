@@ -45,7 +45,7 @@ jobs:
         uses: kangwonlee/gemini-python-tutor@main
         with:
           report-files: test_report.json
-          student-files: models/package1/modelA.mo
+          student-files: models/package1/modelA.mo,exportFMU.mos
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: English
@@ -57,7 +57,7 @@ jobs:
         uses: kangwonlee/gemini-python-tutor@main
         with:
           report-files: test_report.json
-          student-files: models/package1/modelA.mo
+          student-files: models/package1/modelA.mo,exportFMU.mos
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: Swedish
@@ -69,7 +69,7 @@ jobs:
         uses: kangwonlee/gemini-python-tutor@main
         with:
           report-files: test_report.json
-          student-files: models/package1/modelA.mo
+          student-files: models/package1/modelA.mo,exportFMU.mos
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: German
@@ -81,7 +81,7 @@ jobs:
         uses: kangwonlee/gemini-python-tutor@main
         with:
           report-files: test_report.json
-          student-files: models/package1/modelA.mo
+          student-files: models/package1/modelA.mo,exportFMU.mos
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: Korean
