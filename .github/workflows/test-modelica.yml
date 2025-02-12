@@ -32,6 +32,7 @@ jobs:
 
       - name: Run Tests and Generate Report
         run: |
+          conda init
           conda activate test-environment
           conda list
           pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
