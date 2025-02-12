@@ -41,6 +41,18 @@ jobs:
           pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
         shell: bash -el {0}
 
+      - name: AI Tutor
+        uses: kangwonlee/gemini-python-tutor@main
+        with:
+          report-files: test_report.json
+          student-files: models/package1/modelA.mo
+          readme-path: README.md
+          api-key: ${{ secrets.GOOGLE_API_KEY }}
+          explanation-in: Korean
+        id: ai-tutor
+        if: always()
+        timeout-minutes: 2
+
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         with:
