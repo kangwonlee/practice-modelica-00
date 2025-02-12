@@ -1,0 +1,11 @@
+name: OpenModelica Tests
+
+channels:
+- defaults
+- conda-forge
+
+dependencies:
+- numpy
+- pyfmi
+- pytest
+- pytest-json-report

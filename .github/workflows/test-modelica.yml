@@ -9,9 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: conda-incubator/setup-miniconda@v3
+      - name: Set up Miniconda and create test environment
+        uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
+          activate-environment: test-environment
+          environment-file: tests/environment.yml
 
       - name: Install OpenModelica
         run: |
@@ -24,16 +27,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends omc # no graphical clients
 
-      - name: Install Python dependencies
-        run: |
-          conda install -c conda-forge pyfmi pytest pytest-json-report numpy
-
       - name: Export FMU
         run: omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
 
       - name: Run Tests and Generate Report
         run: |
-          . my_env/bin/activate
+          conda activate test-environment
+          conda list
           pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
 
       - name: Upload Test Report
