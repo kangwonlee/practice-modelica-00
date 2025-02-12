@@ -1,0 +1,43 @@
+name: Modelica Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+
+      - name: Install OpenModelica
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates curl gnupg lsb-release
+          sudo curl -fsSL https://build.openmodelica.org/apt/openmodelica.asc | sudo gpg --dearmor -o /usr/share/keyrings/openmodelica.gpg
+
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/openmodelica.gpg] https://build.openmodelica.org/apt $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/openmodelica.list
+
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends omc # no graphical clients
+
+      - name: Install Python dependencies
+        run: |
+          conda install -c https://conda.binstar.org/chria pyfmi
+
+      - name: Export FMU
+        run: omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
+
+      - name: Run Tests and Generate Report
+        run: |
+          . my_env/bin/activate
+          pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: test_report.json
