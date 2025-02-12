@@ -31,8 +31,7 @@ jobs:
         run: |
           which omc
           omc --version
-          omc --help
-          omc +exportFMU=2.0=VibratingSystem.fmu models/package1/modelA.mo
+          omc exportFMU.mos
 
       - name: Run Tests and Generate Report
         run: |
