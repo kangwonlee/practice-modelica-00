@@ -1,14 +1,26 @@
-import pyfmi
-import pytest
 import numpy as np
+import pytest
+
+
+import pyfmi
+
+
+def test__pyfmi_fmi_has_FMU():
+    assert hasattr(pyfmi.fmi, "FMU"), (
+        "pyfmi.fmi should have an FMU class\n"
+        f"dir(pyfmi.fmi): {dir(pyfmi.fmi)}"
+    )
+
 
 @pytest.fixture(scope="module")  # Load FMU only once per test session
 def model():
     return pyfmi.fmi.FMU("VibratingSystem.fmu")  # Path to your FMU
 
+
 def test_initial_conditions(model):
     assert model.get("position") == 1.0  # Check initial position
     assert model.get("der(position)") == 0.0  # Check initial velocity
+
 
 def test_natural_frequency(model):
     # Simulate
@@ -31,6 +43,7 @@ def test_natural_frequency(model):
     tolerance = 0.1 # Adjust tolerance as needed
     assert abs(observed_period - theoretical_period) < tolerance , f"Observed period: {observed_period}, Theoretical period: {theoretical_period}"
 
+
 def test_energy_conservation(model):
     # Simulate
     time = np.linspace(0, 10, 500)
@@ -46,6 +59,7 @@ def test_energy_conservation(model):
 
     tolerance = 0.01  # Adjust tolerance
     assert abs(final_energy - initial_energy) < tolerance, f"Initial energy: {initial_energy}, Final energy: {final_energy}"
+
 
 if "__main__" == __name__:
   pytest.main([__file__])
