@@ -45,7 +45,7 @@ jobs:
         shell: bash -el {0}
 
       - name: AI Tutor in English
-        uses: kangwonlee/gemini-python-tutor@main
+        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
         with:
           report-files: test_report.json
           student-files: models/package1/modelA.mo,exportFMU.mos
@@ -57,7 +57,7 @@ jobs:
         timeout-minutes: 2
 
       - name: AI Tutor in Swedish
-        uses: kangwonlee/gemini-python-tutor@main
+        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
         with:
           report-files: test_report.json
           student-files: models/package1/modelA.mo,exportFMU.mos
@@ -69,7 +69,7 @@ jobs:
         timeout-minutes: 2
 
       - name: AI Tutor in German
-        uses: kangwonlee/gemini-python-tutor@main
+        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
         with:
           report-files: test_report.json
           student-files: models/package1/modelA.mo,exportFMU.mos
@@ -81,7 +81,7 @@ jobs:
         timeout-minutes: 2
 
       - name: AI Tutor in Korean
-        uses: kangwonlee/gemini-python-tutor@main
+        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
         with:
           report-files: test_report.json
           student-files: models/package1/modelA.mo,exportFMU.mos
