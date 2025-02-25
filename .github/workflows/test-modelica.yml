@@ -3,7 +3,7 @@ name: Modelica Tests
 on: [push, pull_request]
 
 jobs:
-  test:
+  build-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,56 +44,38 @@ jobs:
           pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
         shell: bash -el {0}
 
-      - name: AI Tutor in English
-        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
-        with:
-          report-files: test_report.json
-          student-files: models/package1/modelA.mo,exportFMU.mos
-          readme-path: README.md
-          api-key: ${{ secrets.GOOGLE_API_KEY }}
-          explanation-in: English
-        id: ai-tutor-English
-        if: always()
-        timeout-minutes: 2
-
-      - name: AI Tutor in Swedish
-        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
-        with:
-          report-files: test_report.json
-          student-files: models/package1/modelA.mo,exportFMU.mos
-          readme-path: README.md
-          api-key: ${{ secrets.GOOGLE_API_KEY }}
-          explanation-in: Swedish
-        id: ai-tutor-Swedish
-        if: always()
-        timeout-minutes: 2
-
-      - name: AI Tutor in German
-        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
-        with:
-          report-files: test_report.json
-          student-files: models/package1/modelA.mo,exportFMU.mos
-          readme-path: README.md
-          api-key: ${{ secrets.GOOGLE_API_KEY }}
-          explanation-in: German
-        id: ai-tutor-German
-        if: always()
-        timeout-minutes: 2
-
-      - name: AI Tutor in Korean
-        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
-        with:
-          report-files: test_report.json
-          student-files: models/package1/modelA.mo,exportFMU.mos
-          readme-path: README.md
-          api-key: ${{ secrets.GOOGLE_API_KEY }}
-          explanation-in: Korean
-        id: ai-tutor-Korean
-        if: always()
-        timeout-minutes: 2
-
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: test_report.json
+
+  ai-tutor:
+    runs-on: ubuntu-latest
+    needs: build-test
+    if: ${{ always() }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        language: [English, Korean, "Bahasa Indonesia", Chinese, French, German, Italian, Japanese, Nederlands, Norwegian, Spanish, Swedish, Thai, Vietnamese]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: test-report
+
+      - name: AI Tutor
+        uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
+        id: ai-tutor
+        with:
+          report-files: test_report.json
+          student-files: models/package1/modelA.mo,exportFMU.mos
+          readme-path: README.md
+          api-key: ${{ secrets.GOOGLE_API_KEY }}
+          explanation-in: ${{ matrix.language }}
+        if: always()
+        timeout-minutes: 2
