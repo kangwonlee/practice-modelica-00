@@ -38,14 +38,14 @@ jobs:
           echo "HOME=$HOME" && \
           echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" && \
           docker run --rm \
-            --volume "$HOME:${{ github.workspace }}" \
+            --volume "${{ github.workspace }}:${{ github.workspace }}" \
             --env "HOME=${{ github.workspace }}" \
             --workdir "$PWD" \
             --user $UID \
             openmodelica/openmodelica:v1.24.4-ompython \
             pwd && \
           docker run --rm \
-            --volume "$HOME:${{ github.workspace }}" \
+            --volume "${{ github.workspace }}:${{ github.workspace }}" \
             --env "HOME=${{ github.workspace }}" \
             --workdir "$PWD" \
             --user $UID \
@@ -60,7 +60,7 @@ jobs:
             tests/test__docker_run_pytest_ompython.py
 
       - name: Test running pytest within the OMPython docker image
-        run: 'docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
+        run: 'docker run --rm --volume "${{ github.workspace }}:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
 
       - name: Upload Test Report
         if: always()

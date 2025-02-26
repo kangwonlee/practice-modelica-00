@@ -9,7 +9,7 @@ def docker_run(cmd:List[str]) -> subprocess.CompletedProcess:
     return subprocess.run(
         [
             "docker", "run", "--rm",
-            "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
+            "--volume", f"{os.environ['GITHUB_WORKSPACE']}:{os.environ['GITHUB_WORKSPACE']}",
             "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
             "--workdir", f"{os.environ['PWD']}",
             "--user", f"{os.getuid()}",
