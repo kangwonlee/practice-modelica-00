@@ -1,26 +1,29 @@
 import os
 import subprocess
+from typing import List
 
 import pytest
 
 
-def test__docker_run_pytest_ompython():
-    # docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py
-    p = subprocess.run(
-        (
+def docker_run(cmd:List[str]) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [
             "docker", "run", "--rm",
             "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
             "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
             "--workdir", f"{os.environ['PWD']}",
             "--user", f"{os.getuid()}",
             "openmodelica/openmodelica:v1.24.4-ompython",
-            "python", "-m",
-                "pytest", "--version",
-        ),
+        ] + cmd,
         capture_output=True,
         text=True,
     )
-    # could successfully run the command
+
+
+def test__docker_run_pytest_ompython():
+    # docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py
+    p = docker_run(["python", "-m", "pytest", "--version",],)
+
     assert p.returncode == 0, (
         '\n'
         f"Return code: {p.returncode}\n"
@@ -31,19 +34,7 @@ def test__docker_run_pytest_ompython():
 
 def test__docker_run_pytest_omc():
     # docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py
-    p = subprocess.run(
-        (
-            "docker", "run", "--rm",
-            "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
-            "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
-            "--workdir", f"{os.environ['PWD']}",
-            "--user", f"{os.getuid()}",
-            "openmodelica/openmodelica:v1.24.4-ompython",
-            "omc", "--version",
-        ),
-        capture_output=True,
-        text=True,
-    )
+    p = docker_run(["omc", "--version"])
     # could successfully run the command
     assert p.returncode == 0, (
         '\n'
@@ -54,47 +45,11 @@ def test__docker_run_pytest_omc():
 
 
 def test__docker_run_pytest_omc_compile_export_fmu():
-    p_ls = subprocess.run(
-        (
-            "docker", "run", "--rm",
-            "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
-            "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
-            "--workdir", f"{os.environ['PWD']}",
-            "--user", f"{os.getuid()}",
-            "openmodelica/openmodelica:v1.24.4-ompython",
-            "ls", f"{os.environ['GITHUB_WORKSPACE']}",
-        ),
-        capture_output=True,
-        text=True,
-    )
+    p_ls = docker_run(["ls"])
 
-    p_pwd = subprocess.run(
-        (
-            "docker", "run", "--rm",
-            "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
-            "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
-            "--workdir", f"{os.environ['PWD']}",
-            "--user", f"{os.getuid()}",
-            "openmodelica/openmodelica:v1.24.4-ompython",
-            "pwd",
-        ),
-        capture_output=True,
-        text=True,
-    )
+    p_pwd = docker_run(["pwd"])
 
-    p = subprocess.run(
-        (
-            "docker", "run", "--rm",
-            "--volume", f"{os.environ['HOME']}:{os.environ['GITHUB_WORKSPACE']}",
-            "--env", f"HOME={os.environ['GITHUB_WORKSPACE']}",
-            "--workdir", f"{os.environ['PWD']}",
-            "--user", f"{os.getuid()}",
-            "openmodelica/openmodelica:v1.24.4-ompython",
-            "omc", f"{os.environ['GITHUB_WORKSPACE']}/exportFMU.mos",
-        ),
-        capture_output=True,
-        text=True,
-    )
+    p = docker_run(["omc", "exportFMU.mos",])
     # could successfully run the command
     assert p.returncode == 0, (
         '\n'
