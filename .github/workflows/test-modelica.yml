@@ -55,8 +55,8 @@ jobs:
     needs: build-test
     if: ${{ always() }}
     strategy:
-      fail-fast: false
-      max-parallel: 4
+      fail-fast: true # set `false` for all languages
+      max-parallel: 1 # to save CI time
       matrix:
         language: [English, Korean, "Bahasa Indonesia", Chinese, French, German, Italian, Japanese, Nederlands, Norwegian, Spanish, Swedish, Thai, Vietnamese]
     steps:
