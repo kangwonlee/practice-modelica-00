@@ -35,6 +35,8 @@ jobs:
 
       - name: Check docker image
         run: |
+          echo "HOME=$HOME" && \
+          echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" && \
           docker run --rm \
             --volume "$HOME:${{ github.workspace }}" \
             --env "HOME=${{ github.workspace }}" \
