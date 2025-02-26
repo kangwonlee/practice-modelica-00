@@ -44,10 +44,11 @@ jobs:
         run: 'docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
 
       - name: Upload Test Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-report
-          path: test_report.json
+          path: test_*.json
 
   ai-tutor:
     runs-on: ubuntu-latest
@@ -71,7 +72,7 @@ jobs:
         uses: docker://ghcr.io/kangwonlee/gemini-python-tutor:latest
         id: ai-tutor
         with:
-          report-files: test_report.json
+          report-files: test_OMPython.json
           student-files: check_ompython.py
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
