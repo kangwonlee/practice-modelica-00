@@ -33,6 +33,16 @@ jobs:
         # https://openmodelica.org/download/docker/
         run: docker pull openmodelica/openmodelica:v1.24.4-ompython
 
+      - name: Check docker image
+        run: |
+          docker run --rm \
+            --volume "$HOME:${{ github.workspace }}" \
+            --env "HOME=${{ github.workspace }}" \
+            --workdir "$PWD" \
+            --user $UID \
+            openmodelica/openmodelica:v1.24.4-ompython \
+            pwd && ls -rl *
+
       - name: Test running OMPython of docker image
         run: |
           . test-env/bin/activate && \
