@@ -46,6 +46,7 @@ def test__docker_run_pytest_omc():
 
 def test__docker_run_pytest_omc_compile_export_fmu():
     p_ls = docker_run(["ls"])
+    p_ls__home = docker_run(["ls", "$HOME"])
 
     p_pwd = docker_run(["pwd"])
 
@@ -60,6 +61,8 @@ def test__docker_run_pytest_omc_compile_export_fmu():
         f"pwd stderr:\n{p_pwd.stderr}\n"
         f"ls stdout:\n{p_ls.stdout}\n"
         f"ls stderr:\n{p_ls.stderr}\n"
+        f"ls__home stdout:\n{p_ls__home.stdout}\n"
+        f"ls__home stderr:\n{p_ls__home.stderr}\n"
     )
 
 
