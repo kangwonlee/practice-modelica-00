@@ -41,7 +41,14 @@ jobs:
             --workdir "$PWD" \
             --user $UID \
             openmodelica/openmodelica:v1.24.4-ompython \
-            pwd && ls -rl *
+            pwd && \
+          docker run --rm \
+            --volume "$HOME:${{ github.workspace }}" \
+            --env "HOME=${{ github.workspace }}" \
+            --workdir "$PWD" \
+            --user $UID \
+            openmodelica/openmodelica:v1.24.4-ompython \
+            ls -rl *
 
       - name: Test running OMPython of docker image
         run: |
