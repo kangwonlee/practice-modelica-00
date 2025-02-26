@@ -51,8 +51,9 @@ def test__docker_run_pytest_omc_compile_export_fmu():
     p_pwd = docker_run(["pwd"])
 
     p = docker_run(["omc", "exportFMU.mos",])
-    # could successfully run the command
-    assert p.returncode == 0, (
+
+    # assert p.returncode == 0, (
+    assert False, (
         '\n'
         f"Return code: {p.returncode}\n"
         f"stdout:\n{p.stdout}\n"
