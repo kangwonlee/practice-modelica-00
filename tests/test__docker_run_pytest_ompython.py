@@ -63,7 +63,7 @@ def test__docker_run_pytest_omc_compile_export_fmu():
             "--workdir", f"{os.environ['PWD']}",
             "--user", f"{os.getuid()}",
             "openmodelica/openmodelica:v1.24.4-ompython",
-            "omc", "exportFMU.mos",
+            "omc", f"{os.environ['GITHUB_WORKSPACE']}/exportFMU.mos",
         ),
         capture_output=True,
         text=True,
