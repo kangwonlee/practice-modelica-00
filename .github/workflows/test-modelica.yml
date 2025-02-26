@@ -33,6 +33,13 @@ jobs:
         # https://openmodelica.org/download/docker/
         run: docker pull openmodelica/openmodelica:v1.24.4-ompython
 
+      - name: Test running OMPython of docker image
+        run: |
+          . test-env/bin/activate && \
+          python -m pytest \
+            --json-report --json-report-indent=4 --json-report-file="test_OMPython.json" \
+            tests/test__docker_run_pytest_ompython.py
+
       - name: Check docker image
         run: |
           echo "HOME=$HOME" && \
@@ -50,14 +57,7 @@ jobs:
             --workdir "$PWD" \
             --user $UID \
             openmodelica/openmodelica:v1.24.4-ompython \
-            ls -rl *
-
-      - name: Test running OMPython of docker image
-        run: |
-          . test-env/bin/activate && \
-          python -m pytest \
-            --json-report --json-report-indent=4 --json-report-file="test_OMPython.json" \
-            tests/test__docker_run_pytest_ompython.py
+            ls -l
 
       - name: Test running pytest within the OMPython docker image
         run: 'docker run --rm --volume "${{ github.workspace }}:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
