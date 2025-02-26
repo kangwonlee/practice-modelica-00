@@ -9,20 +9,39 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Pull Docker Image
+      - uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+          enable-cache: true
+          cache-suffix: "uv"
+          cache-dependency-glob: requirements.txt
+
+      - name: Create and Activate Virtual Environment
+        run: |
+          uv venv test-env
+          source test-env/bin/activate
+          echo $VIRTUAL_ENV
+
+      - name: Setup test environment
+        id: setup-env
+        run: |
+          source test-env/bin/activate
+          echo $VIRTUAL_ENV
+          uv pip install -r requirements.txt
+
+      - name: Pull OMPython Docker Image
         # https://openmodelica.org/download/docker/
         run: docker pull openmodelica/openmodelica:v1.24.4-ompython
 
-      - name: Run OpenModelica
-        run: 'docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
-
-      - name: Run Tests and Generate Report
+      - name: Test running OMPython of docker image
         run: |
-          conda init
-          conda activate test-environment
-          conda list
-          pytest --json-report --json-report-indent=4 --json-report-file=test_report.json tests/test_vibrating_system.py
-        shell: bash -el {0}
+          . test-env/bin/activate && \
+          python -m pytest \
+            --json-report --json-report-indent=4 --json-report-file="test_OMPython.json" \
+            tests/test__docker_run_pytest_ompython.py
+
+      - name: Test running pytest within the OMPython docker image
+        run: 'docker run --rm --volume "$HOME:${{ github.workspace }}" --env "HOME=${{ github.workspace }}" --workdir "$PWD" --user $UID openmodelica/openmodelica:v1.24.4-ompython python -m pytest tests/test__check_ompython.py'
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
@@ -53,7 +72,7 @@ jobs:
         id: ai-tutor
         with:
           report-files: test_report.json
-          student-files: models/package1/modelA.mo,exportFMU.mos
+          student-files: check_ompython.py
           readme-path: README.md
           api-key: ${{ secrets.GOOGLE_API_KEY }}
           explanation-in: ${{ matrix.language }}

@@ -1,5 +1,6 @@
 # Practice Modelica 00
 
+* Please use docker image of OMPython for this assignment.<br>이번 과제에서는 OMPython의 도커 이미지를 사용해주세요.
 * Please model a mechanical vibration system with following parameter.<br>아래와 같은 매개변수를 갖는 기계진동계 모델을 만드시오.
     * m = 1 [kg]
     * k = 1 [N/m]
